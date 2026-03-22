@@ -4,19 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Property Requirements | Luxe Estate</title>
-    <!-- Premium minimal typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="form_styles.css">
+    <link rel="stylesheet" href="form-styles.css">
+
+    <style>
+        /* इमेज और डिजाइन को बेहतर बनाने के लिए एक्स्ट्रा CSS */
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #f9f9f9; }
+        
+        .jp-header {
+            padding: 20px 5%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .jp-logo { font-weight: 500; font-size: 1.2rem; letter-spacing: 1px; }
+
+        .jp-hero {
+            position: relative;
+            height: 80vh; /* बड़ी स्क्रीन के लिए हाइट */
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .jp-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* यहाँ मैंने एक प्रीमियम जयपुर प्रॉपर्टी की इमेज लगा दी है */
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transition: transform 0.8s ease;
+        }
+
+        .jp-hero:hover .jp-hero-bg { transform: scale(1.05); }
+
+        .jp-hero-content { max-width: 800px; padding: 20px; }
+
+        .jp-hero-title {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .jp-hero-btn {
+            padding: 15px 40px;
+            font-size: 1rem;
+            background: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .jp-hero-btn:hover { background: #e0e0e0; transform: translateY(-3px); }
+
+        /* Form styling fixes */
+        .form-wrapper { padding: 80px 5%; }
+        .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .form-header h2 { font-size: 2rem; margin-bottom: 10px; }
+        .input-group { margin-bottom: 25px; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .submit-btn { width: 100%; padding: 18px; background: #1a1a1a; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .submit-btn:hover { background: #333; }
+        
+        @media (max-width: 768px) {
+            .input-grid, .checkbox-grid { grid-template-columns: 1fr; }
+            .jp-hero-title { font-size: 2rem; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Top Header -->
     <header class="jp-header">
         <div class="jp-logo">✨ Jaipur Properties</div>
     </header>
 
-    <!-- Hero Section -->
     <section class="jp-hero">
         <div class="jp-hero-bg"></div>
         <div class="jp-hero-content">
@@ -25,130 +106,75 @@
         </div>
     </section>
 
-    <!-- Form Section -->
     <div id="form-section-target" class="form-wrapper">
         <div class="form-container fade-in">
-        <div class="form-header">
-            <h2>Find Your Next Property</h2>
-            <p>Share your exact requirements and contact details so our luxury experts can find the perfect match for you.</p>
-        </div>
-
-        <form id="requirementForm" class="luxe-form">
-            <!-- 1. Contact Details -->
-            <div class="form-section">
-                <h3>Contact Details</h3>
-                <div class="input-group">
-                    <input type="text" id="name" name="name" required placeholder="Full Name">
-                </div>
-                <div class="input-grid">
-                    <div class="input-group">
-                        <input type="tel" id="phone" name="phone" required placeholder="Phone Number" pattern="[0-9]*">
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="email" name="email" required placeholder="Gmail">
-                    </div>
-                </div>
+            <div class="form-header">
+                <h2>Find Your Next Property</h2>
+                <p>Share your exact requirements and contact details so our luxury experts can find the perfect match for you.</p>
             </div>
 
-            <!-- 2. Property Requirements -->
-            <div class="form-section">
-                <h3>Property Requirements</h3>
-                
-                <!-- Property Type (Checkboxes) -->
-                <div class="input-group">
-                    <label>Property Type (Select multiple if needed)</label>
-                    <div class="checkbox-grid">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="type" value="Personal House"> 
-                            <span class="checkmark"></span> Personal House
-                        </label>
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="type" value="Apartment"> 
-                            <span class="checkmark"></span> Apartment
-                        </label>
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="type" value="Building"> 
-                            <span class="checkmark"></span> Building
-                        </label>
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="type" value="Villa"> 
-                            <span class="checkmark"></span> Villa
-                        </label>
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="type" value="Bungalow"> 
-                            <span class="checkmark"></span> Bungalow
-                        </label>
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="type" value="Flat"> 
-                            <span class="checkmark"></span> Flat
-                        </label>
+            <form id="requirementForm" class="luxe-form">
+                <div class="form-section">
+                    <h3>Contact Details</h3>
+                    <div class="input-group">
+                        <input type="text" id="name" name="name" required placeholder="Full Name">
                     </div>
-                </div>
-
-                <!-- Budget Options -->
-                <div class="input-group">
-                    <label>Budget</label>
-                    <p class="inline-text">Select a range:</p>
                     <div class="input-grid">
-                        <select name="min_budget" id="min_budget">
-                            <option value="">Minimum Budget</option>
-                            <option value="50L">₹ 50 Lacs</option>
-                            <option value="1Cr">₹ 1 Crore</option>
-                            <option value="2.5Cr">₹ 2.5 Crores</option>
-                            <option value="5Cr">₹ 5 Crores</option>
-                            <option value="10Cr">₹ 10 Crores</option>
-                        </select>
-
-                        <select name="max_budget" id="max_budget">
-                            <option value="">Maximum Budget</option>
-                            <option value="1Cr">₹ 1 Crore</option>
-                            <option value="2.5Cr">₹ 2.5 Crores</option>
-                            <option value="5Cr">₹ 5 Crores</option>
-                            <option value="10Cr">₹ 10 Crores</option>
-                            <option value="25Cr+">₹ 25 Crores +</option>
-                        </select>
-                    </div>
-                    <p class="inline-text" style="margin-top: 1.5rem;">Or type your exact budget manually:</p>
-                    <input type="text" id="exact_budget" name="exact_budget" placeholder="e.g. ₹ 3.5 Crores or ₹ 80 Lacs">
-                </div>
-
-                <!-- Floors -->
-                <div class="input-group">
-                    <label>Floor Preferences</label>
-                    <div class="input-grid">
-                        <div class="input-group-inner">
-                            <p class="inline-text" style="margin-top: 0;">How many total floors?</p>
-                            <input type="number" id="total_floors" name="total_floors" placeholder="e.g. 2 Floors">
+                        <div class="input-group">
+                            <input type="tel" id="phone" name="phone" required placeholder="Phone Number" pattern="[0-9]*">
                         </div>
-                        <div class="input-group-inner">
-                            <p class="inline-text" style="margin-top: 0;">On which floor do you want it?</p>
-                            <input type="text" id="preferred_floor" name="preferred_floor" placeholder="e.g. Ground Floor, 5th Floor">
+                        <div class="input-group">
+                            <input type="email" id="email" name="email" required placeholder="Gmail">
                         </div>
                     </div>
                 </div>
 
-                <!-- Location -->
-                <div class="input-group">
-                    <label>Location</label>
-                    <p class="inline-text">Type your preferred location or select from dropdown:</p>
-                    <!-- using a datalist allows typing + selecting -->
-                    <input type="text" id="location" name="location" list="locationList" placeholder="Search location (e.g. Vaishali Nagar, Jaipur)">
-                    <datalist id="locationList">
-                        <option value="Vaishali Nagar, Jaipur"></option>
-                        <option value="Malviya Nagar, Jaipur"></option>
-                        <option value="C-Scheme, Jaipur"></option>
-                        <option value="Mansarovar, Jaipur"></option>
-                        <option value="Jagatpura, Jaipur"></option>
-                        <option value="Bani Park, Jaipur"></option>
-                        <option value="Civil Lines, Jaipur"></option>
-                        <option value="Raja Park, Jaipur"></option>
-                    </datalist>
-                </div>
-            </div>
+                <div class="form-section">
+                    <h3>Property Requirements</h3>
+                    
+                    <div class="input-group">
+                        <label>Property Type</label>
+                        <div class="checkbox-grid">
+                            <label><input type="checkbox" name="type" value="Personal House"> Personal House</label>
+                            <label><input type="checkbox" name="type" value="Apartment"> Apartment</label>
+                            <label><input type="checkbox" name="type" value="Building"> Building</label>
+                            <label><input type="checkbox" name="type" value="Villa"> Villa</label>
+                            <label><input type="checkbox" name="type" value="Bungalow"> Bungalow</label>
+                            <label><input type="checkbox" name="type" value="Flat"> Flat</label>
+                        </div>
+                    </div>
 
-            <!-- Submit -->
-            <button type="button" class="submit-btn" onclick="submitForm()">Submit Requirements</button>
-        </form>
+                    <div class="input-group">
+                        <label>Budget Range</label>
+                        <div class="input-grid">
+                            <select name="min_budget" id="min_budget">
+                                <option value="">Min Budget</option>
+                                <option value="50L">₹ 50 Lacs</option>
+                                <option value="1Cr">₹ 1 Crore</option>
+                            </select>
+                            <select name="max_budget" id="max_budget">
+                                <option value="">Max Budget</option>
+                                <option value="10Cr">₹ 10 Crores</option>
+                                <option value="25Cr+">₹ 25 Crores +</option>
+                            </select>
+                        </div>
+                        <input type="text" id="exact_budget" name="exact_budget" placeholder="Or type manually: e.g. ₹ 3.5 Crores" style="margin-top:15px;">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Location</label>
+                        <input type="text" id="location" name="location" list="locationList" placeholder="Search location (e.g. Vaishali Nagar)">
+                        <datalist id="locationList">
+                            <option value="Vaishali Nagar, Jaipur">
+                            <option value="Malviya Nagar, Jaipur">
+                            <option value="C-Scheme, Jaipur">
+                            <option value="Mansarovar, Jaipur">
+                        </datalist>
+                    </div>
+                </div>
+
+                <button type="button" class="submit-btn" onclick="submitForm()">Submit Requirements</button>
+            </form>
         </div>
     </div>
 
@@ -160,15 +186,8 @@
         function submitForm() {
             const location = document.getElementById("location").value;
             const budget = document.getElementById("exact_budget").value;
-
-            if (!location) {
-                alert("Please enter location");
-                return;
-            }
-
-            window.location.href =
-                "jaipur_properties.html?location=" + encodeURIComponent(location) +
-                "&budget=" + encodeURIComponent(budget);
+            if (!location) { alert("Please enter location"); return; }
+            window.location.href = "jaipur_properties.html?location=" + encodeURIComponent(location) + "&budget=" + encodeURIComponent(budget);
         }
     </script>
 </body>
