@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Finder</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body { font-family: Inter; padding:20px; }
+#map { height:300px; margin-top:20px; }
+</style>
+</head>
+
+<body>
+
+<h2>Find Your Property</h2>
+
+<input id="location" type="text" placeholder="Enter location" style="width:100%;padding:10px;"><br><br>
+
+<input type="text" id="budget" placeholder="Enter budget (₹ per sqft)" style="width:100%;padding:10px;"><br><br>
+
+<button onclick="searchProperty()">Search</button>
+
+<div id="result" style="margin-top:20px;font-weight:bold;"></div>
+
+<div id="results" style="display:flex; flex-wrap:wrap; gap:20px; margin-top:20px;"></div>
+<div id="details" style="margin-top:20px; padding:10px; background:#f9f9f9; border-radius:8px; display:none;"></div>
+
+<div id="map"></div>
+
+<!-- ✅ API KEY ALREADY ADDED -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT3UABO2zk6XNQOkuocF707lcYjezig0E&libraries=places"></script>
+
+<script>
+// 🔥 Setup URL Params
+const params = new URLSearchParams(window.location.search);
+const userLocation = params.get("location") || "";
+const userBudget = params.get("budget") || "";
+
+// 🔥 Autocomplete
+const input = document.getElementById("location");
+input.value = userLocation;
+document.getElementById("budget").value = userBudget;
+
+window.onload = function() {
+    if (userLocation || userBudget) {
+        setTimeout(search, 500); // auto trigger search
+    }
+};
+
+const autocomplete = new google.maps.places.Autocomplete(input);
+
+let selectedLat = 26.9124;
+let selectedLng = 75.7873;
+
+autocomplete.addListener("place_changed", function () {
+    const place = autocomplete.getPlace();
+    if (place.geometry) {
+        selectedLat = place.geometry.location.lat();
+        selectedLng = place.geometry.location.lng();
+    }
+});
+
+// 🔥 Map init
+let map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 12,
+    center: { lat: selectedLat, lng: selectedLng }
+});
+
+let marker = new google.maps.Marker({
+    position: { lat: selectedLat, lng: selectedLng },
+    map: map
+});
+
+// 🔥 Price data
+const data = {
+    "vaishali": 4500,
+    "jagatpura": 3200,
+    "mansarovar": 3500
+};
+
+// 🔥 Search logic
+function search() {
+    let location = document.getElementById("location").value.toLowerCase();
+    let budget = document.getElementById("budget").value;
+
+    map.setCenter({ lat: selectedLat, lng: selectedLng });
+    marker.setPosition({ lat: selectedLat, lng: selectedLng });
+
+    let matched = null;
+
+    for (let key in data) {
+        if (location.includes(key)) {
+            matched = data[key];
+        }
+    }
+
+    if (matched) {
+        if (budget >= matched) {
+            document.getElementById("result").innerHTML =
+                `<div style="padding: 16px; background: #e6ffe6; border-left: 4px solid #28a745; border-radius: 6px; font-family: Inter, sans-serif;">
+                    <strong style="color: #155724; font-size: 1.1em;">✅ Good area for you</strong><br>
+                    <span style="color: #155724; opacity: 0.8; font-size: 0.9em;">Average price: ₹${matched} / sqft</span>
+                </div>`;
+        } else {
+            document.getElementById("result").innerHTML =
+                `<div style="padding: 16px; background: #ffe6e6; border-left: 4px solid #dc3545; border-radius: 6px; font-family: Inter, sans-serif;">
+                    <strong style="color: #721c24; font-size: 1.1em;">❌ Out of budget</strong><br>
+                    <span style="color: #721c24; opacity: 0.8; font-size: 0.9em;">Area price: ₹${matched} / sqft</span>
+                </div>`;
+        }
+    } else {
+        document.getElementById("result").innerHTML =
+            `<div style="padding: 16px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 6px; font-family: Inter, sans-serif;">
+                <strong style="color: #856404; font-size: 1.1em;">⚠️ Area data not available</strong>
+            </div>`;
+    }
+}
+
+const properties = [
+{
+id:1,
+area:"Vaishali Nagar",
+price:7500000,
+title:"2BHK Luxury Flat",
+image:"https://via.placeholder.com/250",
+lat:26.911,
+lng:75.780,
+desc:"Near market"
+}
+];
+
+function searchProperty(){
+    // First, maintain previous logic to not break it
+    search();
+
+    let loc = document.getElementById("location").value.toLowerCase();
+    
+    // Cleanup string in case user passed something like "50 Lacs"
+    let rawBudget = document.getElementById("budget").value.replace(/[^0-9.]/g, '');
+    let budget = parseInt(rawBudget) || 0;
+
+    // Filter based on location and budget
+    let filtered = properties.filter(p =>
+        p.area.toLowerCase().includes(loc) && p.price <= budget
+    );
+
+    let output = "";
+
+    filtered.forEach(p=>{
+        output += `       <div onclick="showDetails(${p.id})" style="cursor:pointer; border:1px solid #eee; padding:15px; border-radius:8px; background:#fff; transition:0.3s; box-shadow:0 2px 4px rgba(0,0,0,0.05);">         <img src="${p.image}" width="200" style="border-radius:4px; margin-bottom:10px;">         <h3 style="margin:0 0 5px 0; font-size:1.1em;">${p.title}</h3>         <p style="margin:0; color:#28a745; font-weight:600;">₹${p.price.toLocaleString()}</p>       </div>
+        `;
+    });
+
+    // If nothing found in the dummy data but location provided, show gracefully
+    if(filtered.length === 0 && loc !== "") {
+        output = "<p style='color:#777;'>No matching properties found in this specific area for your budget.</p>";
+    }
+
+    document.getElementById("results").innerHTML = output;
+}
+
+function showDetails(id){
+    let p = properties.find(x=>x.id===id);
+    let detailsDiv = document.getElementById("details");
+    detailsDiv.style.display = "block";
+
+    detailsDiv.innerHTML = ` 
+        <h2 style="margin-top:0;">${p.title}</h2> 
+        <div style="display:flex; gap:20px;">
+            <img src="${p.image}" width="300" style="border-radius:8px;"> 
+            <div>
+                <p style="font-size:1.1em; color:#555;">${p.desc}</p>
+                <p style="font-size:1.2em; font-weight:bold; color:#28a745;">₹${p.price.toLocaleString()}</p>
+                <button onclick="getDirection(${p.lat},${p.lng})" style="background:#007bff; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:500; font-family:Inter;">
+                  Get Direction
+                </button>
+            </div>
+        </div>
+    `;
+
+    if(typeof marker !== "undefined" && typeof map !== "undefined"){
+        marker.setPosition({lat:p.lat, lng:p.lng});
+        map.setCenter({lat:p.lat, lng:p.lng});
+    }
+}
+
+function getDirection(lat,lng){
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`);
+}
+</script>
+
+</body>
+</html>
